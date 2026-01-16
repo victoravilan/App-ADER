@@ -5,43 +5,43 @@ import { Play, Pause, Download, Mic, Globe, Square, Rewind, FastForward, Shuffle
 const DEFAULT_PODCASTS = [
   {
     id: 1,
-    title: "Bienvenida a la Red - Inicio",
-    description: "Introducción a la comunidad ADER y primeros pasos.",
+    title: "Nutrición: Las Proteínas",
+    description: "Importancia y manejo de las proteínas en la dieta renal.",
     date: "2026-01-01",
-    fileName: "podcast_01.mp3",
-    src: "podcast/podcast_01.mp3"
+    fileName: "podcast-ader-001-26-proteinas.mp3",
+    src: "podcast/podcast-ader-001-26-proteinas.mp3"
   },
   {
     id: 2,
-    title: "Consejos de Nutrición - Alimentación",
-    description: "Claves para una dieta renal saludable y equilibrada.",
+    title: "Hidratación: El Agua",
+    description: "Consejos fundamentales sobre el control de líquidos.",
     date: "2026-01-05",
-    fileName: "podcast_02.mp3",
-    src: "podcast/podcast_02.mp3"
+    fileName: "podcast-ader-002-26-agua.mp3",
+    src: "podcast/podcast-ader-002-26-agua.mp3"
   },
   {
     id: 3,
-    title: "Cuidado del Acceso - Fístula",
-    description: "Cómo proteger y mantener tu acceso vascular.",
+    title: "Comunidad: ADER Bizcaya",
+    description: "Novedades, eventos y noticias de la asociación en Bizcaya.",
     date: "2026-01-10",
-    fileName: "podcast_03.mp3",
-    src: "podcast/podcast_03.mp3"
+    fileName: "podcast-ader-003-bizcaya.mp3",
+    src: "podcast/podcast-ader-003-bizcaya.mp3"
   },
   {
     id: 4,
-    title: "Manejo de Líquidos - Hidratación",
-    description: "Estrategias para controlar la ingesta de líquidos.",
+    title: "Salud: El Consumo de Sal",
+    description: "Impacto del sodio y estrategias para reducirlo en tus comidas.",
     date: "2026-01-15",
-    fileName: "podcast_04.mp3",
-    src: "podcast/podcast_04.mp3"
+    fileName: "podcast-ader-004-25-sal.mp3",
+    src: "podcast/podcast-ader-004-25-sal.mp3"
   },
   {
     id: 5,
-    title: "Apoyo Emocional - Bienestar",
-    description: "Cuidando tu salud mental durante el tratamiento.",
+    title: "Especial: Demo Invierno",
+    description: "Contenido especial de temporada y cuidados en invierno.",
     date: "2026-01-20",
-    fileName: "podcast_05.mp3",
-    src: "podcast/podcast_05.mp3"
+    fileName: "Ader-demo-invierno.mp3",
+    src: "podcast/Ader-demo-invierno.mp3"
   }
 ];
 

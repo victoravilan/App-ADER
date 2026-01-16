@@ -1,5 +1,49 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Play, Pause, Download, Mic, Globe, Square, Rewind, FastForward, Shuffle, Loader2, SkipBack, SkipForward, Search } from 'lucide-react';
+import { Play, Pause, Download, Mic, Globe, Square, Rewind, FastForward, Shuffle, Loader2, SkipBack, SkipForward, Search, MessageCircle } from 'lucide-react';
+
+// Datos por defecto para cuando no hay nada en LocalStorage
+const DEFAULT_PODCASTS = [
+  {
+    id: 1,
+    title: "Bienvenida a la Red - Inicio",
+    description: "Introducción a la comunidad ADER y primeros pasos.",
+    date: "2026-01-01",
+    fileName: "podcast_01.mp3",
+    src: "podcast/podcast_01.mp3"
+  },
+  {
+    id: 2,
+    title: "Consejos de Nutrición - Alimentación",
+    description: "Claves para una dieta renal saludable y equilibrada.",
+    date: "2026-01-05",
+    fileName: "podcast_02.mp3",
+    src: "podcast/podcast_02.mp3"
+  },
+  {
+    id: 3,
+    title: "Cuidado del Acceso - Fístula",
+    description: "Cómo proteger y mantener tu acceso vascular.",
+    date: "2026-01-10",
+    fileName: "podcast_03.mp3",
+    src: "podcast/podcast_03.mp3"
+  },
+  {
+    id: 4,
+    title: "Manejo de Líquidos - Hidratación",
+    description: "Estrategias para controlar la ingesta de líquidos.",
+    date: "2026-01-15",
+    fileName: "podcast_04.mp3",
+    src: "podcast/podcast_04.mp3"
+  },
+  {
+    id: 5,
+    title: "Apoyo Emocional - Bienestar",
+    description: "Cuidando tu salud mental durante el tratamiento.",
+    date: "2026-01-20",
+    fileName: "podcast_05.mp3",
+    src: "podcast/podcast_05.mp3"
+  }
+];
 
 export default function Home() {
   const [podcasts, setPodcasts] = useState([]);
@@ -71,15 +115,9 @@ export default function Home() {
         
         if (localData) {
           data = JSON.parse(localData);
-          // Filtrar títulos ficticios antiguos
-          const titulosFicticios = [
-            "Bienvenida a la Red - Inicio", 
-            "Consejos de Nutrición - Alimentación", 
-            "Cuidado del Acceso - Fístula", 
-            "Manejo de Líquidos - Hidratación", 
-            "Apoyo Emocional - Bienestar"
-          ];
-          data = data.filter(p => !titulosFicticios.includes(p.title));
+        } else {
+          // Si no hay datos locales, usar los por defecto
+          data = DEFAULT_PODCASTS;
         }
         
         // Ordenar por nombre de archivo
@@ -110,7 +148,11 @@ export default function Home() {
   }, [currentIdx, podcasts]);
 
   const handleInstallClick = async () => {
-    if (!installPrompt) return;
+    if (!installPrompt) {
+      // Fallback para navegadores que no soportan el evento o ya está instalada
+      alert("Para instalar la app:\n\n1. Presiona el menú de tu navegador (tres puntos o botón compartir).\n2. Busca la opción 'Instalar aplicación' o 'Agregar a inicio'.");
+      return;
+    }
     installPrompt.prompt();
     const { outcome } = await installPrompt.userChoice;
     if (outcome === 'accepted') setInstallPrompt(null);
@@ -187,7 +229,7 @@ export default function Home() {
           <a href="https://www.ader.org" target="_blank" rel="noopener noreferrer" className="bg-white p-2 rounded-full shadow-sm text-slate-400 hover:text-blue-600 transition-colors">
             <Globe size={20} />
           </a>
-          <img src="/img/logo ader.png" alt="Logo" className="h-8 w-auto object-contain" />
+          <img src="img/logo ader.png" alt="Logo" className="h-8 w-auto object-contain" />
         </div>
       </header>
 
@@ -222,6 +264,17 @@ export default function Home() {
           </div>
         )}
       </div>
+
+      {/* Botón WhatsApp */}
+      <a 
+        href="https://whatsapp.com/channel/0029VbBszfGFi8xjHl3Tul23" 
+        target="_blank" 
+        rel="noopener noreferrer"
+        className="w-full bg-[#25D366] text-white py-3 px-4 rounded-xl font-bold flex items-center justify-center gap-2 shadow-md shadow-green-100 text-sm hover:bg-[#20bd5a] transition-colors mb-6"
+      >
+        <MessageCircle size={18} />
+        UNIRME AL CANAL DE WHATSAPP
+      </a>
 
       {/* REPRODUCTOR DE RADIO */}
       <div className="bg-gradient-to-br from-blue-600 to-indigo-700 rounded-3xl p-5 text-white shadow-lg shadow-blue-200 mb-6 relative overflow-hidden">
@@ -316,15 +369,13 @@ export default function Home() {
       </div>
 
       {/* BOTÓN DE INSTALACIÓN */}
-      {installPrompt && (
-        <button 
-          onClick={handleInstallClick}
-          className="w-full bg-emerald-500 text-white py-3 px-4 rounded-xl font-bold flex items-center justify-center gap-2 mb-6 shadow-md shadow-emerald-200 text-sm"
-        >
-          <Download size={18} />
-          Instalar App
-        </button>
-      )}
+      <button 
+        onClick={handleInstallClick}
+        className="w-full bg-slate-800 text-white py-3 px-4 rounded-xl font-bold flex items-center justify-center gap-2 mb-6 shadow-md text-sm"
+      >
+        <Download size={18} />
+        Instalar / Agregar a Inicio
+      </button>
 
       <div className="grid grid-cols-2 gap-4">
         <div className="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex flex-col items-center justify-center">

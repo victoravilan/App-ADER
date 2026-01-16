@@ -7,9 +7,9 @@ const NIVELES_DATA = [
     tema: "Alimentación Renal",
     color: "from-green-500 to-emerald-600",
     cartas: [
-      '/img/nivel1/n1-manzana.png', '/img/nivel1/n1-pera.png', '/img/nivel1/n1-uvas.png', 
-      '/img/nivel1/n1-pina.png', '/img/nivel1/n1-fresas.png', '/img/nivel1/n1-pollo.png', 
-      '/img/nivel1/n1-pescado.png', '/img/nivel1/n1-zanahoria.png', '/img/nivel1/n1-brocoli.png', '/img/nivel1/n1-arroz.png'
+      'img/nivel1/n1-manzana.png', 'img/nivel1/n1-pera.png', 'img/nivel1/n1-uvas.png', 
+      'img/nivel1/n1-pina.png', 'img/nivel1/n1-fresas.png', 'img/nivel1/n1-pollo.png', 
+      'img/nivel1/n1-pescado.png', 'img/nivel1/n1-zanahoria.png', 'img/nivel1/n1-brocoli.png', 'img/nivel1/n1-arroz.png'
     ],
     consejos: [
       {
@@ -35,9 +35,9 @@ const NIVELES_DATA = [
     tema: "Control de Líquidos",
     color: "from-blue-500 to-cyan-600",
     cartas: [
-      '/img/nivel2/n2-gota.png', '/img/nivel2/n2-hielo.png', '/img/nivel2/n2-limon.png', 
-      '/img/nivel2/n2-te.png', '/img/nivel2/n2-stop.png', '/img/nivel2/n2-regla.png', 
-      '/img/nivel2/n2-balanza.png', '/img/nivel2/n2-labios.png', '/img/nivel2/n2-calor.png', '/img/nivel2/n2-vaso.png'
+      'img/nivel2/n2-gota.png', 'img/nivel2/n2-hielo.png', 'img/nivel2/n2-limon.png', 
+      'img/nivel2/n2-te.png', 'img/nivel2/n2-stop.png', 'img/nivel2/n2-regla.png', 
+      'img/nivel2/n2-balanza.png', 'img/nivel2/n2-labios.png', 'img/nivel2/n2-calor.png', 'img/nivel2/n2-vaso.png'
     ],
     consejos: [
       {
@@ -63,9 +63,9 @@ const NIVELES_DATA = [
     tema: "Vida Activa",
     color: "from-orange-500 to-red-600",
     cartas: [
-      '/img/nivel3/n3-caminar.png', '/img/nivel3/n3-yoga.png', '/img/nivel3/n3-bicicleta.png', 
-      '/img/nivel3/n3-nadar.png', '/img/nivel3/n3-arbol.png', '/img/nivel3/n3-zapatillas.png', 
-      '/img/nivel3/n3-balon.png', '/img/nivel3/n3-baile.png', '/img/nivel3/n3-limpieza.png', '/img/nivel3/n3-perro.png'
+      'img/nivel3/n3-caminar.png', 'img/nivel3/n3-yoga.png', 'img/nivel3/n3-bicicleta.png', 
+      'img/nivel3/n3-nadar.png', 'img/nivel3/n3-arbol.png', 'img/nivel3/n3-zapatillas.png', 
+      'img/nivel3/n3-balon.png', 'img/nivel3/n3-baile.png', 'img/nivel3/n3-limpieza.png', 'img/nivel3/n3-perro.png'
     ],
     consejos: [
       {
@@ -91,9 +91,9 @@ const NIVELES_DATA = [
     tema: "Hemodiálisis y Acceso",
     color: "from-purple-500 to-indigo-600",
     cartas: [
-      '/img/nivel4/n4-jeringuilla.png', '/img/nivel4/n4-tirita.png', '/img/nivel4/n4-estetoscopio.png', 
-      '/img/nivel4/n4-jabon.png', '/img/nivel4/n4-guantes.png', '/img/nivel4/n4-hospital.png', 
-      '/img/nivel4/n4-sillon.png', '/img/nivel4/n4-termometro.png', '/img/nivel4/n4-sangre.png', '/img/nivel4/n4-escudo.png'
+      'img/nivel4/n4-jeringuilla.png', 'img/nivel4/n4-tirita.png', 'img/nivel4/n4-estetoscopio.png', 
+      'img/nivel4/n4-jabon.png', 'img/nivel4/n4-guantes.png', 'img/nivel4/n4-hospital.png', 
+      'img/nivel4/n4-sillon.png', 'img/nivel4/n4-termometro.png', 'img/nivel4/n4-sangre.png', 'img/nivel4/n4-escudo.png'
     ],
     consejos: [
       {
@@ -119,9 +119,9 @@ const NIVELES_DATA = [
     tema: "Bienestar Emocional",
     color: "from-pink-500 to-rose-600",
     cartas: [
-      '/img/nivel5/n5-corazon.png', '/img/nivel5/n5-apreton.png', '/img/nivel5/n5-abrazo.png', 
-      '/img/nivel5/n5-hablar.png', '/img/nivel5/n5-familia.png', '/img/nivel5/n5-pintura.png', 
-      '/img/nivel5/n5-musica.png', '/img/nivel5/n5-mascota.png', '/img/nivel5/n5-zen.png', '/img/nivel5/n5-regalo.png'
+      'img/nivel5/n5-corazon.png', 'img/nivel5/n5-apreton.png', 'img/nivel5/n5-abrazo.png', 
+      'img/nivel5/n5-hablar.png', 'img/nivel5/n5-familia.png', 'img/nivel5/n5-pintura.png', 
+      'img/nivel5/n5-musica.png', 'img/nivel5/n5-mascota.png', 'img/nivel5/n5-zen.png', 'img/nivel5/n5-regalo.png'
     ],
     consejos: [
       {
@@ -147,9 +147,9 @@ const NIVELES_DATA = [
     tema: "Medicación y Control",
     color: "from-yellow-500 to-amber-600",
     cartas: [
-      '/img/nivel6/n6-pastilla.png', '/img/nivel6/n6-inyeccion.png', '/img/nivel6/n6-historial.png', 
-      '/img/nivel6/n6-reloj.png', '/img/nivel6/n6-calendario.png', '/img/nivel6/n6-grafica.png', 
-      '/img/nivel6/n6-doctor.png', '/img/nivel6/n6-agua.png', '/img/nivel6/n6-comida.png', '/img/nivel6/n6-rinon.png'
+      'img/nivel6/n6-pastilla.png', 'img/nivel6/n6-inyeccion.png', 'img/nivel6/n6-historial.png', 
+      'img/nivel6/n6-reloj.png', 'img/nivel6/n6-calendario.png', 'img/nivel6/n6-grafica.png', 
+      'img/nivel6/n6-doctor.png', 'img/nivel6/n6-agua.png', 'img/nivel6/n6-comida.png', 'img/nivel6/n6-rinon.png'
     ],
     consejos: [
       {
@@ -175,9 +175,9 @@ const NIVELES_DATA = [
     tema: "Sueño y Descanso",
     color: "from-slate-700 to-slate-900",
     cartas: [
-      '/img/nivel7/n7-luna.png', '/img/nivel7/n7-cama.png', '/img/nivel7/n7-zzz.png', 
-      '/img/nivel7/n7-bano.png', '/img/nivel7/n7-libro.png', '/img/nivel7/n7-vela.png', 
-      '/img/nivel7/n7-silencio.png', '/img/nivel7/n7-estrellas.png', '/img/nivel7/n7-buho.png', '/img/nivel7/n7-nube.png'
+      'img/nivel7/n7-luna.png', 'img/nivel7/n7-cama.png', 'img/nivel7/n7-zzz.png', 
+      'img/nivel7/n7-bano.png', 'img/nivel7/n7-libro.png', 'img/nivel7/n7-vela.png', 
+      'img/nivel7/n7-silencio.png', 'img/nivel7/n7-estrellas.png', 'img/nivel7/n7-buho.png', 'img/nivel7/n7-nube.png'
     ],
     consejos: [
       {

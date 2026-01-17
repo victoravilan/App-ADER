@@ -54,7 +54,9 @@ export default function Home() {
   const [duration, setDuration] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isShuffle, setIsShuffle] = useState(false); // Estado para modo aleatorio
+  const [initialTime, setInitialTime] = useState(0); // Tiempo inicial para reanudar
   const [installPrompt, setInstallPrompt] = useState(null);
+  const [isStandalone, setIsStandalone] = useState(false);
   const audioRef = useRef(new Audio());
 
   useEffect(() => {
@@ -62,6 +64,13 @@ export default function Home() {
       e.preventDefault();
       setInstallPrompt(e);
     });
+
+    // Detectar si la app ya está instalada (modo standalone)
+    const checkStandalone = () => {
+      const isStandaloneMode = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+      setIsStandalone(!!isStandaloneMode);
+    };
+    checkStandalone();
   }, []);
 
   // Control de eventos de audio (Tiempo y Finalización)
@@ -124,8 +133,18 @@ export default function Home() {
         data.sort((a, b) => a.fileName.localeCompare(b.fileName));
         
         setPodcasts(data);
-        if (data.length > 0) {
-          audioRef.current.src = data[0].src;
+
+        // RECUPERAR ESTADO DE REPRODUCCIÓN (Donde se quedó la última vez)
+        const savedState = localStorage.getItem('ader_player_state');
+        if (savedState) {
+          const { idx, time } = JSON.parse(savedState);
+          if (idx >= 0 && idx < data.length) {
+            setCurrentIdx(idx);
+          }
+          if (time > 0) {
+            setInitialTime(time);
+            setCurrentTime(time); // Actualizar visualmente la barra antes de cargar
+          }
         }
       } catch (error) {
         console.error("Error cargando podcasts:", error);
@@ -136,16 +155,41 @@ export default function Home() {
     fetchPodcasts();
   }, []);
 
+  // Guardar estado de reproducción en LocalStorage cada vez que cambie
+  useEffect(() => {
+    if (podcasts.length > 0) {
+      localStorage.setItem('ader_player_state', JSON.stringify({
+        idx: currentIdx,
+        time: currentTime
+      }));
+    }
+  }, [currentIdx, currentTime, podcasts]);
+
   // Efecto para cambiar la fuente de audio cuando cambia el índice
   useEffect(() => {
     if (podcasts.length > 0) {
-      audioRef.current.pause();
-      audioRef.current.src = podcasts[currentIdx].src;
+      const audio = audioRef.current;
+      
+      // Solo cambiar la fuente si es diferente para evitar recargas innecesarias
+      // Nota: audio.src devuelve la URL absoluta, podcasts[].src es relativa
+      if (!audio.src.endsWith(podcasts[currentIdx].src)) {
+        audio.src = podcasts[currentIdx].src;
+        
+        // Si hay un tiempo inicial guardado, saltar a él cuando cargue los metadatos
+        if (initialTime > 0) {
+          const seekToTime = () => {
+            audio.currentTime = initialTime;
+            setInitialTime(0); // Resetear para que no afecte a futuros cambios de canción
+          };
+          audio.addEventListener('loadedmetadata', seekToTime, { once: true });
+        }
+      }
+
       if (isPlaying) {
-        audioRef.current.play().catch(e => console.log("Error reproducción:", e));
+        audio.play().catch(e => console.log("Error reproducción:", e));
       }
     }
-  }, [currentIdx, podcasts]);
+  }, [currentIdx, podcasts]); // initialTime se usa dentro pero no debe disparar el efecto
 
   const handleInstallClick = async () => {
     if (!installPrompt) {
@@ -277,13 +321,15 @@ export default function Home() {
       </a>
 
       {/* BOTÓN DE INSTALACIÓN */}
-      <button
-        onClick={handleInstallClick}
-        className="w-full bg-slate-800 text-slate-300 border border-slate-700 py-3 px-4 rounded-xl font-bold flex items-center justify-center gap-2 mb-6 shadow-sm text-sm hover:bg-slate-700 hover:text-white transition-colors"
-      >
-        <Download size={18} />
-        Instalar App en mi Inicio
-      </button>
+      {!isStandalone && (
+        <button
+          onClick={handleInstallClick}
+          className="w-full bg-slate-800 text-slate-300 border border-slate-700 py-3 px-4 rounded-xl font-bold flex items-center justify-center gap-2 mb-6 shadow-sm text-sm hover:bg-slate-700 hover:text-white transition-colors"
+        >
+          <Download size={18} />
+          Instalar App en mi Inicio
+        </button>
+      )}
 
       {/* REPRODUCTOR DE RADIO */}
       <div className="bg-gradient-to-br from-blue-600 to-indigo-800 rounded-3xl p-5 text-white shadow-xl shadow-blue-900/20 mb-6 relative overflow-hidden border border-white/10">

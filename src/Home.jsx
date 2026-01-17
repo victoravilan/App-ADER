@@ -270,11 +270,20 @@ export default function Home() {
         href="https://whatsapp.com/channel/0029VbBszfGFi8xjHl3Tul23" 
         target="_blank" 
         rel="noopener noreferrer"
-        className="w-full bg-[#25D366] text-white py-3 px-4 rounded-xl font-bold flex items-center justify-center gap-2 shadow-md shadow-green-100 text-sm hover:bg-[#20bd5a] transition-colors mb-6"
+        className="w-full bg-[#25D366] text-white py-3 px-4 rounded-xl font-bold flex items-center justify-center gap-2 shadow-md shadow-green-100 text-sm hover:bg-[#20bd5a] transition-colors mb-4"
       >
         <MessageCircle size={18} />
         UNIRME AL CANAL DE WHATSAPP
       </a>
+
+      {/* BOTÓN DE INSTALACIÓN */}
+      <button
+        onClick={handleInstallClick}
+        className="w-full bg-slate-800 text-white py-3 px-4 rounded-xl font-bold flex items-center justify-center gap-2 mb-6 shadow-md text-sm hover:bg-slate-700 transition-colors"
+      >
+        <Download size={18} />
+        Instalar App en mi Inicio
+      </button>
 
       {/* REPRODUCTOR DE RADIO */}
       <div className="bg-gradient-to-br from-blue-600 to-indigo-700 rounded-3xl p-5 text-white shadow-lg shadow-blue-200 mb-6 relative overflow-hidden">

@@ -377,15 +377,6 @@ export default function Home() {
         )}
       </div>
 
-      {/* BOTÓN DE INSTALACIÓN */}
-      <button 
-        onClick={handleInstallClick}
-        className="w-full bg-slate-800 text-white py-3 px-4 rounded-xl font-bold flex items-center justify-center gap-2 mb-6 shadow-md text-sm"
-      >
-        <Download size={18} />
-        Instalar / Agregar a Inicio
-      </button>
-
       <div className="grid grid-cols-2 gap-4">
         <div className="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex flex-col items-center justify-center">
            <span className="text-[10px] font-bold text-slate-400 uppercase mb-1 tracking-wider">Próxima Cita</span>

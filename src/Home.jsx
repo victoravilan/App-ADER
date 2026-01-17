@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Play, Pause, Download, Mic, Globe, Square, Rewind, FastForward, Shuffle, Loader2, SkipBack, SkipForward, Search, MessageCircle } from 'lucide-react';
+import { Play, Pause, Download, Mic, Globe, Square, Rewind, FastForward, Shuffle, Loader2, SkipBack, SkipForward, Search, MessageCircle, Share2 } from 'lucide-react';
 
 // Datos por defecto para cuando no hay nada en LocalStorage
 const DEFAULT_PODCASTS = [
@@ -202,6 +202,30 @@ export default function Home() {
     if (outcome === 'accepted') setInstallPrompt(null);
   };
 
+  const handleShareApp = async () => {
+    const shareData = {
+      title: 'App Red Renal ADER',
+      text: 'Te invito a usar la App de la Fundación ADER. Radio, noticias y juegos para pacientes renales.',
+      url: 'https://victoravilan.github.io/App-ADER/'
+    };
+
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData);
+      } catch (err) {
+        if (err.name !== 'AbortError') console.error('Error al compartir:', err);
+      }
+    } else {
+      // Fallback por si el navegador no soporta compartir nativo
+      try {
+        await navigator.clipboard.writeText(`${shareData.title}\n${shareData.text}\n${shareData.url}`);
+        alert('Enlace copiado al portapapeles.');
+      } catch (err) {
+        alert('No se pudo compartir.');
+      }
+    }
+  };
+
   const toggleAudio = () => {
     if (isPlaying) {
       audioRef.current.pause();
@@ -324,12 +348,21 @@ export default function Home() {
       {!isStandalone && (
         <button
           onClick={handleInstallClick}
-          className="w-full bg-slate-800 text-slate-300 border border-slate-700 py-3 px-4 rounded-xl font-bold flex items-center justify-center gap-2 mb-6 shadow-sm text-sm hover:bg-slate-700 hover:text-white transition-colors"
+          className="w-full bg-slate-800 text-slate-300 border border-slate-700 py-3 px-4 rounded-xl font-bold flex items-center justify-center gap-2 mb-4 shadow-sm text-sm hover:bg-slate-700 hover:text-white transition-colors"
         >
           <Download size={18} />
           Instalar App en mi Inicio
         </button>
       )}
+
+      {/* BOTÓN COMPARTIR APP */}
+      <button
+        onClick={handleShareApp}
+        className="w-full bg-blue-900/20 text-blue-400 border border-blue-900/30 py-3 px-4 rounded-xl font-bold flex items-center justify-center gap-2 mb-6 shadow-sm text-sm hover:bg-blue-900/40 transition-colors"
+      >
+        <Share2 size={18} />
+        Compartir App
+      </button>
 
       {/* REPRODUCTOR DE RADIO */}
       <div className="bg-gradient-to-br from-blue-600 to-indigo-800 rounded-3xl p-5 text-white shadow-xl shadow-blue-900/20 mb-6 relative overflow-hidden border border-white/10">

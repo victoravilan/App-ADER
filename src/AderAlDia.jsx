@@ -152,15 +152,15 @@ export default function AderAlDia() {
   };
 
   return (
-    <div className="p-5 bg-slate-50 min-h-screen pb-24">
+    <div className="p-5 min-h-screen pb-24">
       <header className="mb-6 pt-2">
         <div className="flex items-center gap-3 mb-4">
-          <div className="bg-green-100 p-3 rounded-full text-green-600 shadow-sm">
+          <div className="bg-emerald-900/30 p-3 rounded-full text-emerald-400 shadow-sm border border-emerald-800/50">
             <MessageCircle size={28} />
           </div>
           <div>
-            <h2 className="text-2xl font-bold text-slate-800 tracking-tight">ADER al Día</h2>
-            <p className="text-slate-500 text-sm font-medium">Novedades en tiempo real</p>
+            <h2 className="text-2xl font-bold text-slate-100 tracking-tight">ADER al Día</h2>
+            <p className="text-slate-400 text-sm font-medium">Novedades en tiempo real</p>
           </div>
         </div>
         
@@ -176,13 +176,13 @@ export default function AderAlDia() {
 
         {/* Buscador */}
         <div className="mt-6 relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400" size={18} />
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-500" size={18} />
           <input 
             type="text" 
             placeholder="Buscar por tema..." 
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-green-500 text-sm shadow-sm"
+            className="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-700 bg-slate-800 text-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm shadow-sm placeholder-slate-500"
           />
         </div>
       </header>
@@ -190,9 +190,9 @@ export default function AderAlDia() {
       <div className="space-y-4">
         {filteredNoticias.length > 0 ? (
           filteredNoticias.map((post) => (
-          <article key={post.id} className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 animate-in slide-in-from-bottom-2 duration-500">
+          <article key={post.id} className="bg-slate-800 p-6 rounded-2xl shadow-sm border border-slate-700 animate-in slide-in-from-bottom-2 duration-500">
             {post.imagen && (
-              <div className="mb-4 rounded-xl overflow-hidden h-48 bg-slate-100">
+              <div className="mb-4 rounded-xl overflow-hidden h-48 bg-slate-900">
                 <img 
                   src={post.imagen} 
                   alt={post.titulo} 
@@ -202,34 +202,34 @@ export default function AderAlDia() {
               </div>
             )}
             <div className="flex justify-between items-start mb-4">
-              <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 bg-slate-50 px-2 py-1 rounded-lg">
+              <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 bg-slate-900 px-2 py-1 rounded-lg border border-slate-700">
                 {post.fecha}
               </span>
               <span className={`text-[10px] font-bold px-2 py-1 rounded-lg uppercase ${
-                post.categoria === 'Aviso' ? 'text-red-500 bg-red-50' : 
-                post.categoria === 'Nutrición' ? 'text-green-600 bg-green-50' : 
-                post.categoria === 'Salud' ? 'text-purple-600 bg-purple-50' :
-                post.categoria === 'Actividad' ? 'text-orange-600 bg-orange-50' :
-                post.categoria === 'Consejos' ? 'text-cyan-600 bg-cyan-50' :
-                post.categoria === 'Educación' ? 'text-indigo-600 bg-indigo-50' :
-                'text-blue-600 bg-blue-50'
+                post.categoria === 'Aviso' ? 'text-red-400 bg-red-900/20 border border-red-900/30' : 
+                post.categoria === 'Nutrición' ? 'text-emerald-400 bg-emerald-900/20 border border-emerald-900/30' : 
+                post.categoria === 'Salud' ? 'text-purple-400 bg-purple-900/20 border border-purple-900/30' :
+                post.categoria === 'Actividad' ? 'text-orange-400 bg-orange-900/20 border border-orange-900/30' :
+                post.categoria === 'Consejos' ? 'text-cyan-400 bg-cyan-900/20 border border-cyan-900/30' :
+                post.categoria === 'Educación' ? 'text-indigo-400 bg-indigo-900/20 border border-indigo-900/30' :
+                'text-blue-400 bg-blue-900/20 border border-blue-900/30'
               }`}>
                 {post.categoria}
               </span>
             </div>
             
-            <h3 className="text-xl font-bold text-slate-800 mb-3 leading-tight">
+            <h3 className="text-xl font-bold text-slate-100 mb-3 leading-tight">
                 {post.titulo}
             </h3>
 
-            <div className={`text-slate-700 text-sm leading-relaxed mb-4 text-justify whitespace-pre-line ${!expandedPosts[post.id] ? 'line-clamp-4' : ''}`}>
+            <div className={`text-slate-300 text-sm leading-relaxed mb-4 text-justify whitespace-pre-line ${!expandedPosts[post.id] ? 'line-clamp-4' : ''}`}>
               {post.texto}
             </div>
 
-            <div className="flex justify-between items-center border-t border-slate-50 pt-4">
+            <div className="flex justify-between items-center border-t border-slate-700 pt-4">
                <button 
                  onClick={() => togglePost(post.id)}
-                 className="text-blue-600 font-bold text-xs flex items-center gap-1 hover:bg-blue-50 px-3 py-2 rounded-lg transition-colors"
+                 className="text-blue-400 font-bold text-xs flex items-center gap-1 hover:bg-slate-700 px-3 py-2 rounded-lg transition-colors"
                >
                  {expandedPosts[post.id] ? (
                     <>LEER MENOS <ChevronUp size={16} /></>
@@ -240,7 +240,7 @@ export default function AderAlDia() {
 
                <button 
                  onClick={() => handleShare(post)}
-                 className="text-slate-400 hover:text-green-600 transition-colors flex items-center gap-1 text-xs font-bold px-2"
+                 className="text-slate-500 hover:text-emerald-400 transition-colors flex items-center gap-1 text-xs font-bold px-2"
                >
                  <Share2 size={16} />
                </button>
@@ -248,7 +248,7 @@ export default function AderAlDia() {
           </article>
         ))
         ) : (
-          <div className="text-center py-10 text-slate-400 text-sm">
+          <div className="text-center py-10 text-slate-500 text-sm">
             No se encontraron noticias que coincidan con tu búsqueda.
           </div>
         )}

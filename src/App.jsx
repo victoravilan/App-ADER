@@ -10,7 +10,7 @@ export default function App() {
   const [tab, setTab] = useState('home');
 
   return (
-    <div className="min-h-screen bg-slate-50 pb-20 font-sans text-slate-900 selection:bg-blue-100">
+    <div className="min-h-screen bg-slate-900 pb-20 font-sans text-slate-100 selection:bg-blue-500 selection:text-white">
       {/* Vistas dinámicas */}
       {tab === 'home' && <Home />}
       {tab === 'noticias' && <AderAlDia />}
@@ -40,9 +40,16 @@ export default function App() {
           <User size={20} />
           <span className="text-[9px] font-black uppercase mt-1">Perfil</span>
         </button>
-        <button onClick={() => setTab('admin')} className={`flex flex-col items-center ${tab === 'admin' ? 'text-orange-600' : 'text-slate-400'}`}>
+        <button
+          onClick={() => setTab('admin')}
+          className={`relative group flex flex-col items-center ${tab === 'admin' ? 'text-orange-600' : 'text-slate-400'}`}
+        >
           <Settings size={20} />
           <span className="text-[9px] font-black uppercase mt-1">Admin</span>
+          <div className="absolute bottom-full mb-2 w-max hidden group-hover:block bg-slate-800 text-white text-xs rounded-md py-1 px-3 pointer-events-none">
+            Acceso restringido. Solo Administrador
+            <div className="absolute left-1/2 -translate-x-1/2 bottom-[-4px] w-0 h-0 border-l-4 border-l-transparent border-r-4 border-r-transparent border-t-4 border-t-slate-800" />
+          </div>
         </button>
       </nav>
     </div>

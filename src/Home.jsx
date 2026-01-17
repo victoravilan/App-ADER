@@ -219,14 +219,14 @@ export default function Home() {
   const nextIdx = podcasts.length > 0 ? (currentIdx + 1) % podcasts.length : 0;
 
   return (
-    <div className="p-5 max-w-md mx-auto bg-slate-50 min-h-screen pb-24">
+    <div className="p-5 max-w-md mx-auto min-h-screen pb-24">
       <header className="py-4 flex justify-between items-center px-1 mb-2">
         <div>
-          <h2 className="text-2xl font-bold text-slate-800 tracking-tight">¡Hola!</h2>
-          <p className="text-blue-600 font-semibold text-xs tracking-wide uppercase">Fundación ADER</p>
+          <h2 className="text-2xl font-bold text-slate-100 tracking-tight">¡Hola!</h2>
+          <p className="text-blue-400 font-semibold text-xs tracking-wide uppercase">Fundación ADER</p>
         </div>
         <div className="flex items-center gap-3">
-          <a href="https://www.ader.org" target="_blank" rel="noopener noreferrer" className="bg-white p-2 rounded-full shadow-sm text-slate-400 hover:text-blue-600 transition-colors">
+          <a href="https://www.ader.org" target="_blank" rel="noopener noreferrer" className="bg-slate-800 p-2 rounded-full shadow-sm text-slate-400 hover:text-blue-400 transition-colors border border-slate-700">
             <Globe size={20} />
           </a>
           <img src="img/logo ader.png" alt="Logo" className="h-8 w-auto object-contain" />
@@ -236,30 +236,30 @@ export default function Home() {
       {/* Buscador */}
       <div className="mb-6 relative z-20">
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400" size={18} />
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-500" size={18} />
           <input 
             type="text" 
             placeholder="Buscar podcast..." 
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm shadow-sm"
+            className="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-700 bg-slate-800 text-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm shadow-sm placeholder-slate-500"
           />
         </div>
         {searchTerm && (
-          <div className="absolute top-full left-0 right-0 bg-white mt-2 rounded-xl shadow-xl border border-slate-100 overflow-hidden max-h-60 overflow-y-auto">
+          <div className="absolute top-full left-0 right-0 bg-slate-800 mt-2 rounded-xl shadow-xl border border-slate-700 overflow-hidden max-h-60 overflow-y-auto z-30">
             {filteredPodcasts.length > 0 ? (
               filteredPodcasts.map(p => (
                 <button 
                   key={p.id} 
                   onClick={() => handleSearchSelect(p)}
-                  className="w-full text-left p-3 hover:bg-blue-50 text-sm border-b border-slate-50 last:border-0 flex items-center gap-2 text-slate-700"
+                  className="w-full text-left p-3 hover:bg-slate-700 text-sm border-b border-slate-700 last:border-0 flex items-center gap-2 text-slate-300"
                 >
-                  <Play size={14} className="text-blue-500 shrink-0" />
+                  <Play size={14} className="text-blue-400 shrink-0" />
                   <span className="truncate">{p.title}</span>
                 </button>
               ))
             ) : (
-              <div className="p-4 text-center text-slate-400 text-xs">No se encontraron resultados</div>
+              <div className="p-4 text-center text-slate-500 text-xs">No se encontraron resultados</div>
             )}
           </div>
         )}
@@ -279,14 +279,14 @@ export default function Home() {
       {/* BOTÓN DE INSTALACIÓN */}
       <button
         onClick={handleInstallClick}
-        className="w-full bg-slate-800 text-white py-3 px-4 rounded-xl font-bold flex items-center justify-center gap-2 mb-6 shadow-md text-sm hover:bg-slate-700 transition-colors"
+        className="w-full bg-slate-800 text-slate-300 border border-slate-700 py-3 px-4 rounded-xl font-bold flex items-center justify-center gap-2 mb-6 shadow-sm text-sm hover:bg-slate-700 hover:text-white transition-colors"
       >
         <Download size={18} />
         Instalar App en mi Inicio
       </button>
 
       {/* REPRODUCTOR DE RADIO */}
-      <div className="bg-gradient-to-br from-blue-600 to-indigo-700 rounded-3xl p-5 text-white shadow-lg shadow-blue-200 mb-6 relative overflow-hidden">
+      <div className="bg-gradient-to-br from-blue-600 to-indigo-800 rounded-3xl p-5 text-white shadow-xl shadow-blue-900/20 mb-6 relative overflow-hidden border border-white/10">
         <div className="flex justify-between items-start mb-6 relative z-10">
           <Mic size={24} className="opacity-80" />
           <span className="bg-white/20 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">En Vivo</span>
@@ -378,13 +378,13 @@ export default function Home() {
       </div>
 
       <div className="grid grid-cols-2 gap-4">
-        <div className="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex flex-col items-center justify-center">
-           <span className="text-[10px] font-bold text-slate-400 uppercase mb-1 tracking-wider">Próxima Cita</span>
-           <span className="text-slate-800 font-bold text-lg">15 ENE</span>
+        <div className="bg-slate-800 p-5 rounded-2xl shadow-sm border border-slate-700 flex flex-col items-center justify-center">
+           <span className="text-[10px] font-bold text-slate-500 uppercase mb-1 tracking-wider">Próxima Cita</span>
+           <span className="text-slate-200 font-bold text-lg">15 ENE</span>
         </div>
-        <div className="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex flex-col items-center justify-center">
-           <span className="text-[10px] font-bold text-slate-400 uppercase mb-1 tracking-wider">Tu Estado</span>
-           <span className="text-emerald-500 font-bold text-lg">Estable</span>
+        <div className="bg-slate-800 p-5 rounded-2xl shadow-sm border border-slate-700 flex flex-col items-center justify-center">
+           <span className="text-[10px] font-bold text-slate-500 uppercase mb-1 tracking-wider">Tu Estado</span>
+           <span className="text-emerald-400 font-bold text-lg">Estable</span>
         </div>
       </div>
     </div>

@@ -215,43 +215,43 @@ export default function PacientePanel() {
   if (!currentUser) {
     // VISTA DE LOGIN / REGISTRO
     return (
-      <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-6 pb-24">
-        <div className="bg-white p-8 rounded-3xl shadow-xl w-full max-w-sm text-center">
-          <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-blue-600">
+      <div className="min-h-screen flex flex-col items-center justify-center p-6 pb-24">
+        <div className="bg-slate-800 p-8 rounded-3xl shadow-xl w-full max-w-sm text-center border border-slate-700">
+          <div className="bg-slate-900 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-blue-500 border border-slate-700">
             <User size={32} />
           </div>
-          <h2 className="text-xl font-bold text-slate-800 mb-2">
+          <h2 className="text-xl font-bold text-slate-100 mb-2">
             {view === 'login' ? 'Mi Perfil' : 'Crear Cuenta'}
           </h2>
-          <p className="text-slate-500 text-sm mb-6">
+          <p className="text-slate-400 text-sm mb-6">
             {view === 'login' ? 'Accede a tu historial clínico y citas.' : 'Regístrate para gestionar tu información.'}
           </p>
           
           <form onSubmit={view === 'login' ? handleLogin : handleRegister} className="space-y-4">
-            <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="Correo electrónico" required className="w-full p-3 bg-slate-50 border rounded-xl text-sm" />
-            <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Contraseña" required className="w-full p-3 bg-slate-50 border rounded-xl text-sm" />
+            <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="Correo electrónico" required className="w-full p-3 bg-slate-900 border border-slate-700 rounded-xl text-sm text-white placeholder-slate-500 focus:outline-none focus:border-blue-500" />
+            <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Contraseña" required className="w-full p-3 bg-slate-900 border border-slate-700 rounded-xl text-sm text-white placeholder-slate-500 focus:outline-none focus:border-blue-500" />
             
             {view === 'login' && (
               <div className="flex items-center justify-between pt-2">
-                <label className="flex items-center text-xs text-slate-500 cursor-pointer">
-                  <input type="checkbox" checked={rememberMe} onChange={e => setRememberMe(e.target.checked)} className="mr-2 rounded border-slate-300" />
+                <label className="flex items-center text-xs text-slate-400 cursor-pointer hover:text-slate-300">
+                  <input type="checkbox" checked={rememberMe} onChange={e => setRememberMe(e.target.checked)} className="mr-2 rounded border-slate-600 bg-slate-900 text-blue-600 focus:ring-0" />
                   Mantener sesión iniciada
                 </label>
-                <button type="button" onClick={handleForgotPassword} className="text-xs text-slate-400 hover:text-blue-600">Olvidé mi clave</button>
+                <button type="button" onClick={handleForgotPassword} className="text-xs text-slate-500 hover:text-blue-400">Olvidé mi clave</button>
               </div>
             )}
 
-            <button type="submit" className="w-full bg-slate-900 text-white font-bold py-3 rounded-xl shadow-lg flex items-center justify-center gap-2">
+            <button type="submit" className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-xl shadow-lg flex items-center justify-center gap-2 transition-colors">
               {view === 'login' ? 'ENTRAR' : 'REGISTRARME'} <ArrowRight size={16} />
             </button>
           </form>
 
-          <div className="text-xs text-slate-400 mt-4">
+          <div className="text-xs text-slate-500 mt-4">
             {view === 'login' 
-              ? <>¿No tienes cuenta? <button onClick={() => setView('register')} className="font-bold text-blue-600">Regístrate</button></>
+              ? <>¿No tienes cuenta? <button onClick={() => setView('register')} className="font-bold text-blue-400 hover:text-blue-300 ml-1">Regístrate</button></>
               : (
               <>
-                ¿Ya tienes cuenta? <button onClick={() => setView('login')} className="font-bold text-blue-600">Inicia sesión</button>
+                ¿Ya tienes cuenta? <button onClick={() => setView('login')} className="font-bold text-blue-400 hover:text-blue-300 ml-1">Inicia sesión</button>
               </>
             )}
           </div>
@@ -263,21 +263,21 @@ export default function PacientePanel() {
   if (view === 'setup' || view === 'edit') {
     // VISTA DE CONFIGURACIÓN / EDICIÓN DE PERFIL
     return (
-      <div className="p-5 bg-slate-50 min-h-screen pb-24">
-        <h2 className="text-2xl font-bold text-slate-800 mb-2">
+      <div className="p-5 min-h-screen pb-24">
+        <h2 className="text-2xl font-bold text-slate-100 mb-2">
           {view === 'setup' ? 'Crea un Nuevo Perfil' : 'Editar Perfil'}
         </h2>
-        <p className="text-slate-500 text-sm mb-6">
+        <p className="text-slate-400 text-sm mb-6">
           {view === 'setup' ? 'Completa los datos para empezar.' : `Estás editando el perfil de ${profileData.nombre}.`}
         </p>
-        <form onSubmit={handleSaveProfile} className="space-y-4 bg-white p-6 rounded-2xl shadow-sm">
-          <input value={profileData.nombre} onChange={e => setProfileData({...profileData, nombre: e.target.value})} placeholder="Nombre y Apellido" required className="w-full p-3 border rounded-xl bg-slate-50" />
-          <input value={profileData.fechaNacimiento} onChange={e => setProfileData({...profileData, fechaNacimiento: e.target.value})} type="date" placeholder="Fecha de Nacimiento" required className="w-full p-3 border rounded-xl bg-slate-50" />
-          <input value={profileData.lugarNacimiento} onChange={e => setProfileData({...profileData, lugarNacimiento: e.target.value})} placeholder="Lugar de Nacimiento" required className="w-full p-3 border rounded-xl bg-slate-50" />
-          <input value={profileData.tipoSangre} onChange={e => setProfileData({...profileData, tipoSangre: e.target.value})} placeholder="Tipo de Sangre" required className="w-full p-3 border rounded-xl bg-slate-50" />
-          <input value={profileData.telefono} onChange={e => setProfileData({...profileData, telefono: e.target.value})} type="tel" placeholder="Teléfono" required className="w-full p-3 border rounded-xl bg-slate-50" />
+        <form onSubmit={handleSaveProfile} className="space-y-4 bg-slate-800 p-6 rounded-2xl shadow-sm border border-slate-700">
+          <input value={profileData.nombre} onChange={e => setProfileData({...profileData, nombre: e.target.value})} placeholder="Nombre y Apellido" required className="w-full p-3 border border-slate-600 rounded-xl bg-slate-900 text-white placeholder-slate-500 focus:outline-none focus:border-blue-500" />
+          <input value={profileData.fechaNacimiento} onChange={e => setProfileData({...profileData, fechaNacimiento: e.target.value})} type="date" placeholder="Fecha de Nacimiento" required className="w-full p-3 border border-slate-600 rounded-xl bg-slate-900 text-white placeholder-slate-500 focus:outline-none focus:border-blue-500" />
+          <input value={profileData.lugarNacimiento} onChange={e => setProfileData({...profileData, lugarNacimiento: e.target.value})} placeholder="Lugar de Nacimiento" required className="w-full p-3 border border-slate-600 rounded-xl bg-slate-900 text-white placeholder-slate-500 focus:outline-none focus:border-blue-500" />
+          <input value={profileData.tipoSangre} onChange={e => setProfileData({...profileData, tipoSangre: e.target.value})} placeholder="Tipo de Sangre" required className="w-full p-3 border border-slate-600 rounded-xl bg-slate-900 text-white placeholder-slate-500 focus:outline-none focus:border-blue-500" />
+          <input value={profileData.telefono} onChange={e => setProfileData({...profileData, telefono: e.target.value})} type="tel" placeholder="Teléfono" required className="w-full p-3 border border-slate-600 rounded-xl bg-slate-900 text-white placeholder-slate-500 focus:outline-none focus:border-blue-500" />
           <div className="flex gap-2 pt-2">
-            <button type="button" onClick={() => setView('profile')} className="w-1/2 bg-slate-200 text-slate-700 font-bold py-3 rounded-xl">CANCELAR</button>
+            <button type="button" onClick={() => setView('profile')} className="w-1/2 bg-slate-700 text-slate-300 font-bold py-3 rounded-xl hover:bg-slate-600 transition-colors">CANCELAR</button>
             <button type="submit" className="w-full bg-blue-600 text-white font-bold py-3 rounded-xl shadow-lg">GUARDAR CAMBIOS</button>
           </div>
         </form>
@@ -289,13 +289,13 @@ export default function PacientePanel() {
   const currentProfile = profiles[selectedProfileIndex];
 
   return (
-    <div className="p-5 bg-slate-50 min-h-screen pb-24">
+    <div className="p-5 min-h-screen pb-24">
       <header className="mb-6 flex justify-between items-start pt-2">
         <div>
-          <h2 className="text-2xl font-bold text-slate-800 tracking-tight">{currentProfile?.nombre}</h2>
-          <p className="text-slate-500 text-sm font-medium">Perfil del Paciente</p>
+          <h2 className="text-2xl font-bold text-slate-100 tracking-tight">{currentProfile?.nombre}</h2>
+          <p className="text-slate-400 text-sm font-medium">Perfil del Paciente</p>
         </div>
-        <button onClick={handleLogout} className="text-xs font-bold text-red-500 bg-red-50 px-3 py-2 rounded-lg flex items-center gap-1">
+        <button onClick={handleLogout} className="text-xs font-bold text-red-400 bg-red-900/20 border border-red-900/30 px-3 py-2 rounded-lg flex items-center gap-1 hover:bg-red-900/40 transition-colors">
           <LogOut size={14} /> Salir
         </button>
       </header>
@@ -307,7 +307,7 @@ export default function PacientePanel() {
             <button 
               key={i} 
               onClick={() => setSelectedProfileIndex(i)}
-              className={`px-4 py-2 rounded-full text-xs font-bold whitespace-nowrap ${selectedProfileIndex === i ? 'bg-blue-600 text-white shadow-md' : 'bg-white text-slate-600 border'}`}
+              className={`px-4 py-2 rounded-full text-xs font-bold whitespace-nowrap transition-colors ${selectedProfileIndex === i ? 'bg-blue-600 text-white shadow-md' : 'bg-slate-800 text-slate-400 border border-slate-700 hover:bg-slate-700'}`}
             >
               {p.nombre.split(' ')[0]}
             </button>
@@ -316,28 +316,28 @@ export default function PacientePanel() {
       )}
 
       {/* Datos del Perfil */}
-      <section className="mb-8 bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+      <section className="mb-8 bg-slate-800 p-6 rounded-2xl shadow-sm border border-slate-700">
         <div className="flex justify-between items-center mb-4">
-          <h3 className="font-bold text-slate-700 text-sm uppercase tracking-wider">Datos Personales</h3>
-          <button onClick={handleEditClick} className="text-xs font-bold text-blue-600 bg-blue-50 px-3 py-2 rounded-lg flex items-center gap-1">
+          <h3 className="font-bold text-slate-300 text-sm uppercase tracking-wider">Datos Personales</h3>
+          <button onClick={handleEditClick} className="text-xs font-bold text-blue-400 bg-blue-900/20 border border-blue-900/30 px-3 py-2 rounded-lg flex items-center gap-1 hover:bg-blue-900/40 transition-colors">
             <Edit size={14} /> Editar
           </button>
         </div>
         <div className="grid grid-cols-2 gap-4 text-sm">
-          <div><strong className="block text-xs text-slate-400">F. Nacimiento:</strong> {currentProfile?.fechaNacimiento}</div>
-          <div><strong className="block text-xs text-slate-400">L. Nacimiento:</strong> {currentProfile?.lugarNacimiento}</div>
-          <div><strong className="block text-xs text-slate-400">T. Sangre:</strong> {currentProfile?.tipoSangre}</div>
-          <div><strong className="block text-xs text-slate-400">Teléfono:</strong> {currentProfile?.telefono}</div>
+          <div className="text-slate-300"><strong className="block text-xs text-slate-500 mb-1">F. Nacimiento:</strong> {currentProfile?.fechaNacimiento}</div>
+          <div className="text-slate-300"><strong className="block text-xs text-slate-500 mb-1">L. Nacimiento:</strong> {currentProfile?.lugarNacimiento}</div>
+          <div className="text-slate-300"><strong className="block text-xs text-slate-500 mb-1">T. Sangre:</strong> {currentProfile?.tipoSangre}</div>
+          <div className="text-slate-300"><strong className="block text-xs text-slate-500 mb-1">Teléfono:</strong> {currentProfile?.telefono}</div>
         </div>
       </section>
 
       {/* Documentos */}
       <section>
         <div className="flex justify-between items-center mb-3">
-          <h3 className="font-bold text-slate-700 flex items-center gap-2 text-sm uppercase tracking-wider">
-            <FileText size={16} className="text-purple-500" /> Documentos
+          <h3 className="font-bold text-slate-300 flex items-center gap-2 text-sm uppercase tracking-wider">
+            <FileText size={16} className="text-purple-400" /> Documentos
           </h3>
-          <label className="cursor-pointer text-xs font-bold text-blue-600 bg-blue-50 px-3 py-2 rounded-lg flex items-center gap-1">
+          <label className="cursor-pointer text-xs font-bold text-blue-400 bg-blue-900/20 border border-blue-900/30 px-3 py-2 rounded-lg flex items-center gap-1 hover:bg-blue-900/40 transition-colors">
             <Upload size={14} /> Subir
             <input type="file" className="hidden" onChange={handleDocumentUpload} />
           </label>
@@ -345,16 +345,16 @@ export default function PacientePanel() {
         <div className="space-y-3">
           {currentProfile?.documentos.length > 0 ? (
             currentProfile.documentos.map((doc, i) => (
-              <div key={i} className="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 flex justify-between items-center">
+              <div key={i} className="bg-slate-800 p-4 rounded-2xl shadow-sm border border-slate-700 flex justify-between items-center">
                 <div>
-                  <p className="font-bold text-sm text-slate-700">{doc.name}</p>
-                  <p className="text-[10px] text-slate-400 font-medium">Subido: {doc.date}</p>
+                  <p className="font-bold text-sm text-slate-200">{doc.name}</p>
+                  <p className="text-[10px] text-slate-500 font-medium">Subido: {doc.date}</p>
                 </div>
-                <button disabled className="text-[10px] font-black text-slate-400 bg-slate-100 px-3 py-1.5 rounded-lg cursor-not-allowed">VER</button>
+                <button disabled className="text-[10px] font-black text-slate-500 bg-slate-900 px-3 py-1.5 rounded-lg cursor-not-allowed border border-slate-700">VER</button>
               </div>
             ))
           ) : (
-            <div className="text-center py-6 bg-white rounded-2xl border border-dashed text-slate-400 text-sm">No hay documentos.</div>
+            <div className="text-center py-6 bg-slate-800 rounded-2xl border border-dashed border-slate-600 text-slate-500 text-sm">No hay documentos.</div>
           )}
         </div>
       </section>
@@ -363,7 +363,7 @@ export default function PacientePanel() {
       {profiles.length < 3 && (
         <button 
           onClick={() => setView('setup')}
-          className="w-full mt-8 bg-white border-2 border-dashed py-3 rounded-xl font-bold text-slate-500 flex items-center justify-center gap-2"
+          className="w-full mt-8 bg-slate-800 border-2 border-dashed border-slate-600 py-3 rounded-xl font-bold text-slate-400 flex items-center justify-center gap-2 hover:bg-slate-700 hover:text-slate-200 transition-colors"
         >
           <PlusCircle size={16} /> Añadir Otro Perfil ({profiles.length}/3)
         </button>
@@ -371,7 +371,7 @@ export default function PacientePanel() {
 
       <button 
         onClick={handleDeleteProfile}
-        className="w-full mt-4 text-red-600 font-bold text-xs flex items-center justify-center gap-2 py-2"
+        className="w-full mt-4 text-red-400 font-bold text-xs flex items-center justify-center gap-2 py-2 hover:text-red-300 transition-colors"
       >
         <Trash2 size={14} /> Eliminar Perfil de {currentProfile?.nombre.split(' ')[0]}
       </button>

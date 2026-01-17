@@ -299,12 +299,12 @@ export default function JuegoMemoria() {
   }, [solved, cartas]);
 
   return (
-    <div className="min-h-screen bg-slate-50 p-5 pb-28">
+    <div className="min-h-screen p-5 pb-28">
       <header className="text-center mb-6 pt-2">
         <div className={`inline-block px-3 py-1 rounded-full bg-gradient-to-r ${nivelActual.color} text-white text-[10px] font-bold uppercase mb-2 shadow-sm`}>
           Nivel {nivelActual.id} de 7
         </div>
-        <h2 className="text-2xl font-bold text-slate-800 tracking-tight">{nivelActual.tema}</h2>
+        <h2 className="text-2xl font-bold text-slate-100 tracking-tight">{nivelActual.tema}</h2>
       </header>
 
       {!mostrarInfo ? (
@@ -315,7 +315,7 @@ export default function JuegoMemoria() {
               onClick={() => handleCardClick(carta.id)}
               className={`aspect-square rounded-xl flex items-center justify-center cursor-pointer transition-all duration-300 shadow-sm overflow-hidden
                 ${flipped.includes(carta.id) || solved.includes(carta.id) 
-                  ? 'bg-white border border-blue-100 scale-100 shadow-md rotate-0' 
+                  ? 'bg-slate-800 border border-slate-600 scale-100 shadow-md rotate-0' 
                   : `bg-gradient-to-br ${nivelActual.color} text-transparent scale-95 hover:scale-100 rotate-180`}`}
             >
               {(flipped.includes(carta.id) || solved.includes(carta.id)) && (
@@ -325,28 +325,28 @@ export default function JuegoMemoria() {
           ))}
         </div>
       ) : (
-        <div className="max-w-sm mx-auto bg-white rounded-3xl p-6 shadow-xl shadow-slate-200 border border-slate-100 text-center animate-in zoom-in duration-300">
+        <div className="max-w-sm mx-auto bg-slate-800 rounded-3xl p-6 shadow-2xl border border-slate-700 text-center animate-in zoom-in duration-300">
           <Trophy className="mx-auto text-yellow-500 mb-3" size={48} />
-          <h3 className="text-xl font-bold text-slate-800 mb-3">{consejoMostrar?.titulo}</h3>
-          <p className="text-slate-600 text-sm leading-relaxed mb-6">"{consejoMostrar?.texto}"</p>
+          <h3 className="text-xl font-bold text-slate-100 mb-3">{consejoMostrar?.titulo}</h3>
+          <p className="text-slate-300 text-sm leading-relaxed mb-6">"{consejoMostrar?.texto}"</p>
           
           <button 
             onClick={() => leerConsejo(consejoMostrar?.texto)}
-            className="w-full bg-blue-50 text-blue-600 py-3 rounded-xl font-bold flex items-center justify-center gap-2 mb-3 text-sm hover:bg-blue-100 transition-colors"
+            className="w-full bg-blue-900/30 text-blue-400 border border-blue-900/50 py-3 rounded-xl font-bold flex items-center justify-center gap-2 mb-3 text-sm hover:bg-blue-900/50 transition-colors"
           >
             <Volume2 size={20} /> ESCUCHAR CONSEJO
           </button>
 
           <button 
             onClick={() => setNivelIdx((prev) => (prev + 1) % NIVELES_DATA.length)}
-            className="w-full bg-slate-800 text-white py-3.5 rounded-xl font-bold flex items-center justify-center gap-2 shadow-lg text-sm"
+            className="w-full bg-slate-900 text-white py-3.5 rounded-xl font-bold flex items-center justify-center gap-2 shadow-lg text-sm border border-slate-700 hover:bg-slate-950 transition-colors"
           >
             SIGUIENTE TEMA <ArrowRight size={20} />
           </button>
         </div>
       )}
       
-      <button onClick={() => window.location.reload()} className="mx-auto mt-8 flex items-center gap-2 text-slate-400 font-bold text-xs uppercase tracking-widest">
+      <button onClick={() => window.location.reload()} className="mx-auto mt-8 flex items-center gap-2 text-slate-500 hover:text-slate-300 font-bold text-xs uppercase tracking-widest transition-colors">
         <RefreshCw size={14} /> Reiniciar Juego
       </button>
     </div>

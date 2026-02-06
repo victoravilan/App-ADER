@@ -1,48 +1,58 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { Routes, Route, Link, useLocation } from 'react-router-dom';
 import Home from './Home';
-import JuegoMemoria from './JuegoMemoria'; // Importamos el juego
-import AdminPanel from './AdminPanel';   // Importamos el panel
-import PacientePanel from './PacientePanel'; // Importamos panel paciente
-import AderAlDia from './AderAlDia'; // Importamos microblogging
-import { Mic, Brain, Settings, User, Newspaper } from 'lucide-react';
+import JuegoMemoria from './JuegoMemoria';
+import AdminPanel from './AdminPanel';
+import PacientePanel from './PacientePanel';
+import AderAlDia from './AderAlDia';
+import Centros from './Centros';
+import Comunidad from './Comunidad';
+import { Mic, Brain, Settings, User, Newspaper, Users } from 'lucide-react';
 
 export default function App() {
-  const [tab, setTab] = useState('home');
+  const location = useLocation();
+  const tab = location.pathname;
 
   return (
     <div className="min-h-screen bg-slate-900 pb-20 font-sans text-slate-100 selection:bg-blue-500 selection:text-white">
-      {/* Vistas dinámicas */}
-      {tab === 'home' && <Home />}
-      {tab === 'noticias' && <AderAlDia />}
-      {tab === 'juego' && <JuegoMemoria />}
-      {tab === 'paciente' && <PacientePanel />}
-      {tab === 'admin' && <AdminPanel />}
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/noticias" element={<AderAlDia />} />
+        <Route path="/comunidad" element={<Comunidad />} />
+        <Route path="/juego" element={<JuegoMemoria />} />
+        <Route path="/paciente" element={<PacientePanel />} />
+        <Route path="/admin" element={<AdminPanel />} />
+        <Route path="/centros" element={<Centros />} />
+      </Routes>
 
       <footer className="text-center text-[10px] text-slate-400 py-6 opacity-80">
         Diseñado y creado por Victor M.F. Avilan - Valor Agregado. Derechos reservados
       </footer>
 
-      {/* Menú de Navegación inferior */}
       <nav className="fixed bottom-0 w-full bg-white/80 backdrop-blur-xl border-t border-slate-200/60 h-16 flex justify-around items-center px-2 shadow-lg z-50">
-        <button onClick={() => setTab('home')} className={`flex flex-col items-center ${tab === 'home' ? 'text-blue-600' : 'text-slate-400'}`}>
+        <Link to="/" className={`flex flex-col items-center ${tab === '/' ? 'text-blue-600' : 'text-slate-400'}`}>
           <Mic size={20} />
           <span className="text-[9px] font-black uppercase mt-1">Radio</span>
-        </button>
-        <button onClick={() => setTab('noticias')} className={`flex flex-col items-center ${tab === 'noticias' ? 'text-green-600' : 'text-slate-400'}`}>
+        </Link>
+        <Link to="/noticias" className={`flex flex-col items-center ${tab === '/noticias' ? 'text-green-600' : 'text-slate-400'}`}>
           <Newspaper size={20} />
           <span className="text-[9px] font-black uppercase mt-1">Al Día</span>
-        </button>
-        <button onClick={() => setTab('juego')} className={`flex flex-col items-center ${tab === 'juego' ? 'text-purple-600' : 'text-slate-400'}`}>
+        </Link>
+        <Link to="/comunidad" className={`flex flex-col items-center ${tab === '/comunidad' ? 'text-yellow-600' : 'text-slate-400'}`}>
+          <Users size={20} />
+          <span className="text-[9px] font-black uppercase mt-1">Comunidad</span>
+        </Link>
+        <Link to="/juego" className={`flex flex-col items-center ${tab === '/juego' ? 'text-purple-600' : 'text-slate-400'}`}>
           <Brain size={20} />
           <span className="text-[9px] font-black uppercase mt-1">Juego</span>
-        </button>
-        <button onClick={() => setTab('paciente')} className={`flex flex-col items-center ${tab === 'paciente' ? 'text-emerald-600' : 'text-slate-400'}`}>
+        </Link>
+        <Link to="/paciente" className={`flex flex-col items-center ${tab === '/paciente' ? 'text-emerald-600' : 'text-slate-400'}`}>
           <User size={20} />
           <span className="text-[9px] font-black uppercase mt-1">Perfil</span>
-        </button>
-        <button
-          onClick={() => setTab('admin')}
-          className={`relative group flex flex-col items-center ${tab === 'admin' ? 'text-orange-600' : 'text-slate-400'}`}
+        </Link>
+        <Link
+          to="/admin"
+          className={`relative group flex flex-col items-center ${tab === '/admin' ? 'text-orange-600' : 'text-slate-400'}`}
         >
           <Settings size={20} />
           <span className="text-[9px] font-black uppercase mt-1">Admin</span>
@@ -50,7 +60,7 @@ export default function App() {
             Acceso restringido. Solo Administrador
             <div className="absolute left-1/2 -translate-x-1/2 bottom-[-4px] w-0 h-0 border-l-4 border-l-transparent border-r-4 border-r-transparent border-t-4 border-t-slate-800" />
           </div>
-        </button>
+        </Link>
       </nav>
     </div>
   );

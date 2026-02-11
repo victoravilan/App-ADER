@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Globe, ChevronDown } from 'lucide-react';
 
 const links = [
-  { name: 'Fundación ADER', url: 'https://www.ader.org' },
+  { name: 'Fundación de Enfermos Renales', url: 'https://www.ader.org' },
   { name: 'Diaverum', url: 'https://www.diaverum.es' },
   { name: 'Fresenius Kabi', url: 'https://www.fresenius-kabi.com' },
   { name: 'Centros de Diálisis', url: '/centros', internal: true },

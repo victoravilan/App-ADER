@@ -61,21 +61,24 @@ export default function Home() {
   }, [currentIdx, isShuffle, podcasts]);
 
   useEffect(() => {
-    const fetchPodcasts = async () => {
+    const loadPodcasts = async () => {
       setLoading(true);
       try {
         const podcastsCollection = collection(firestore, 'podcasts');
         const q = query(podcastsCollection, orderBy('createdAt', 'desc'));
         const podcastSnapshot = await getDocs(q);
-        const podcastList = podcastSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        setPodcasts(podcastList);
+        const podcastsList = podcastSnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+        setPodcasts(podcastsList);
       } catch (error) {
         console.error("Error fetching podcasts from Firestore:", error);
-      } finally {
-        setLoading(false);
+        // Optionally, set an error state to show in the UI
       }
+      setLoading(false);
     };
-    fetchPodcasts();
+    loadPodcasts();
   }, []);
 
   useEffect(() => {
@@ -224,34 +227,6 @@ export default function Home() {
         )}
       </div>
       
-      {!isStandalone && (
-        <button
-          onClick={handleInstallClick}
-          className="w-full bg-slate-800 text-slate-300 border border-slate-700 py-3 px-4 rounded-xl font-bold flex items-center justify-center gap-2 mb-4"
-        >
-          <Download size={18} />
-          Instalar App en mi Inicio
-        </button>
-      )}
-
-      <a 
-        href="https://whatsapp.com/channel/0029VbBszfGFi8xjHl3Tul23" 
-        target="_blank" 
-        rel="noopener noreferrer"
-        className="w-full bg-[#25D366] text-white py-3 px-4 rounded-xl font-bold flex items-center justify-center gap-2 mb-4"
-      >
-        <MessageCircle size={18} />
-        UNIRME AL CANAL DE WHATSAPP
-      </a>
-
-      <button
-        onClick={handleShareApp}
-        className="w-full bg-blue-900/20 text-ader-blue border border-blue-900/30 py-3 px-4 rounded-xl font-bold flex items-center justify-center gap-2 mb-6"
-      >
-        <Share2 size={18} />
-        Compartir App
-      </button>
-
       <div className="bg-gradient-to-br from-ader-blue to-indigo-800 rounded-3xl p-5 text-white shadow-xl mb-6">
         <div className="flex justify-between items-start mb-6">
           <Mic size={24} />
@@ -313,6 +288,34 @@ export default function Home() {
           </>
         )}
       </div>
+
+      {!isStandalone && (
+        <button
+          onClick={handleInstallClick}
+          className="w-full bg-slate-800 text-slate-300 border border-slate-700 py-3 px-4 rounded-xl font-bold flex items-center justify-center gap-2 mb-4"
+        >
+          <Download size={18} />
+          Instalar App en mi Inicio
+        </button>
+      )}
+
+      <a 
+        href="https://whatsapp.com/channel/0029VbBszfGFi8xjHl3Tul23" 
+        target="_blank" 
+        rel="noopener noreferrer"
+        className="w-full bg-[#25D366] text-white py-3 px-4 rounded-xl font-bold flex items-center justify-center gap-2 mb-4"
+      >
+        <MessageCircle size={18} />
+        UNIRME AL CANAL DE WHATSAPP
+      </a>
+
+      <button
+        onClick={handleShareApp}
+        className="w-full bg-blue-900/20 text-ader-blue border border-blue-900/30 py-3 px-4 rounded-xl font-bold flex items-center justify-center gap-2 mb-6"
+      >
+        <Share2 size={18} />
+        Compartir App
+      </button>
 
       <div className="grid grid-cols-2 gap-4">
         <div className="bg-slate-800 p-5 rounded-2xl">

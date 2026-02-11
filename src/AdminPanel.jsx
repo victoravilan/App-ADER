@@ -1,16 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { storage, firestore } from './firebase'; // Import from Firebase config
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { collection, addDoc, serverTimestamp, getDocs, doc, updateDoc, query, where } from "firebase/firestore";
-import { Upload, PlusCircle, Music, Lock, FileAudio, Calendar, Type, FileText, CheckCircle, AlertCircle, Loader2, Info, Users } from 'lucide-react';
+import { storage, firestore, auth } from './firebase'; // Import auth
+import { signInWithEmailAndPassword } from "firebase/auth"; // Import sign in function
+import { ref, uploadBytesResumable, getDownloadURL, deleteObject } from "firebase/storage";
+import { collection, addDoc, serverTimestamp, getDocs, doc, updateDoc, query, where, orderBy, deleteDoc } from "firebase/firestore";
+import { Upload, PlusCircle, Music, Lock, FileAudio, Calendar, Type, FileText, CheckCircle, AlertCircle, Loader2, Info, Users, Trash2, ListMusic } from 'lucide-react';
 
 export default function AdminPanel() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [email, setEmail] = useState('info.victoravilan@gmail.com'); // Pre-fill admin email
   const [password, setPassword] = useState('');
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
-  const [nextId, setNextId] = useState(1);
   const [feedback, setFeedback] = useState({ message: '', type: '' });
+  
+  const [podcasts, setPodcasts] = useState([]);
+  const [loadingPodcasts, setLoadingPodcasts] = useState(true);
   const [pendingUsers, setPendingUsers] = useState([]);
 
   const [formData, setFormData] = useState({
@@ -22,13 +26,37 @@ export default function AdminPanel() {
     resena: '',
   });
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    if (password === 'ader2026') {
+    setFeedback({ message: '', type: '' });
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
       setIsAuthenticated(true);
-    } else {
-      setFeedback({ message: 'Contraseña incorrecta', type: 'error' });
+    } catch (error) {
+      console.error("Firebase Auth Error:", error);
+      let message = 'Error al iniciar sesión.';
+      if (error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') {
+        message = 'El email o la contraseña son incorrectos.';
+      } else if (error.code === 'auth/invalid-email') {
+        message = 'El formato del email es incorrecto.';
+      }
+      setFeedback({ message, type: 'error' });
     }
+  };
+
+  const fetchPodcasts = async () => {
+    setLoadingPodcasts(true);
+    try {
+        const podcastsCollection = collection(firestore, 'podcasts');
+        const q = query(podcastsCollection, orderBy("createdAt", "desc"));
+        const podcastSnapshot = await getDocs(q);
+        const podcastsList = podcastSnapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+        setPodcasts(podcastsList);
+    } catch (error) {
+        console.error("Error fetching podcasts:", error);
+        setFeedback({ message: 'Error al cargar los podcasts.', type: 'error' });
+    }
+    setLoadingPodcasts(false);
   };
 
   const fetchPendingUsers = async () => {
@@ -45,33 +73,15 @@ export default function AdminPanel() {
 
   useEffect(() => {
     if (isAuthenticated) {
-      const fetchInitialData = async () => {
-        try {
-            const podcastsCollection = collection(firestore, 'podcasts');
-            const podcastSnapshot = await getDocs(podcastsCollection);
-            setNextId(podcastSnapshot.size + 1);
-            await fetchPendingUsers();
-        } catch (error) {
-            console.error("Error fetching initial data:", error);
-        }
-      };
-      fetchInitialData();
+      fetchPodcasts();
+      fetchPendingUsers();
     }
   }, [isAuthenticated]);
-
-  useEffect(() => {
-    if (nextId > 0) {
-      const nextName = `podcast-ader-${String(nextId).padStart(3, '0')}.mp3`;
-      setFormData(prev => ({ ...prev, nombreSistema: nextName }));
-    }
-  }, [nextId]);
   
   const handleApproveUser = async (userId) => {
     const userDocRef = doc(firestore, 'users', userId);
     try {
-        await updateDoc(userDocRef, {
-            status: 'approved'
-        });
+        await updateDoc(userDocRef, { status: 'approved' });
         setFeedback({ message: 'Usuario aprobado con éxito.', type: 'success' });
         await fetchPendingUsers(); // Refresh the list
     } catch (error) {
@@ -83,7 +93,30 @@ export default function AdminPanel() {
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setFormData({ ...formData, archivo: file, nombreTecnico: file.name });
+      const nextId = podcasts.length + 1;
+      const nextName = `podcast-ader-${String(nextId).padStart(3, '0')}-${Date.now()}.mp3`;
+      setFormData(prev => ({ ...prev, archivo: file, nombreTecnico: file.name, nombreSistema: nextName }));
+    }
+  };
+  
+  const handlePodcastDelete = async (podcast) => {
+    if (!window.confirm(`¿Seguro que quieres eliminar el podcast "${podcast.title}"? Esta acción no se puede deshacer.`)) return;
+
+    setFeedback({ message: `Eliminando "${podcast.title}"...`, type: 'info' });
+    try {
+      // 1. Delete file from Storage
+      const storageRef = ref(storage, `podcasts/${podcast.fileName}`);
+      await deleteObject(storageRef);
+
+      // 2. Delete document from Firestore
+      const docRef = doc(firestore, 'podcasts', podcast.id);
+      await deleteDoc(docRef);
+
+      setFeedback({ message: 'Podcast eliminado con éxito.', type: 'success' });
+      await fetchPodcasts(); // Refresh the list
+    } catch (error) {
+        console.error("Error deleting podcast: ", error);
+        setFeedback({ message: `Error al eliminar: ${error.message}`, type: 'error' });
     }
   };
 
@@ -121,7 +154,7 @@ export default function AdminPanel() {
           });
           setFeedback({ message: '¡Podcast subido y registrado con éxito!', type: 'success' });
           setFormData({ archivo: null, nombreTecnico: '', nombreSistema: '', titulo: '', fecha: new Date().toISOString().split('T')[0], resena: '' });
-          setNextId(prev => prev + 1);
+          await fetchPodcasts(); // Refresh list after upload
         } catch (error) {
           setFeedback({ message: `Error al guardar en base de datos: ${error.message}`, type: 'error' });
         } finally {
@@ -140,9 +173,10 @@ export default function AdminPanel() {
             </div>
             <h2 className="text-xl font-bold text-slate-100 mb-2">Acceso Administrativo</h2>
             <form onSubmit={handleLogin} className="space-y-4 mt-6">
-            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="w-full p-4 bg-slate-900 border border-slate-700 rounded-xl text-center" placeholder="••••••••" />
-            <button type="submit" className="w-full bg-blue-600 text-white font-bold py-4 rounded-xl shadow-lg">ENTRAR</button>
-            {feedback.message && <p className={`text-sm mt-4 ${feedback.type === 'error' ? 'text-red-400' : 'text-green-400'}`}>{feedback.message}</p>}
+              <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full p-4 bg-slate-900 border border-slate-700 rounded-xl text-center" placeholder="email@admin.com" />
+              <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="w-full p-4 bg-slate-900 border border-slate-700 rounded-xl text-center" placeholder="••••••••" />
+              <button type="submit" className="w-full bg-blue-600 text-white font-bold py-4 rounded-xl shadow-lg">ENTRAR</button>
+              {feedback.message && <p className={`text-sm mt-4 ${feedback.type === 'error' ? 'text-red-400' : 'text-green-400'}`}>{feedback.message}</p>}
             </form>
         </div>
         </div>
@@ -150,19 +184,20 @@ export default function AdminPanel() {
   }
 
   return (
-    <div className="p-6 min-h-screen pb-20 space-y-8">
-      <div>
-        <h2 className="text-2xl font-bold text-slate-100 mb-6 flex items-center gap-2"><PlusCircle className="text-blue-400" /> Cargar Nuevo Podcast</h2>
-        {feedback.message && (
-            <div className={`border rounded-xl p-4 mb-6 flex gap-3 items-center text-sm ${
-                feedback.type === 'error' ? 'bg-red-900/20 border-red-700/50 text-red-300' : 
-                feedback.type === 'success' ? 'bg-green-900/20 border-green-700/50 text-green-300' : 
-                'bg-blue-900/20 border-blue-700/50 text-blue-300'
+    <div className="p-6 min-h-screen pb-20 space-y-12">
+      {feedback.message && (
+            <div className={`border rounded-xl p-4 flex gap-3 items-center text-sm fixed top-5 right-5 z-50 bg-slate-900 shadow-lg ${
+                feedback.type === 'error' ? 'border-red-700/50 text-red-300' : 
+                feedback.type === 'success' ? 'border-green-700/50 text-green-300' : 
+                'border-blue-700/50 text-blue-300'
             }`}>
-            {feedback.type === 'error' ? <AlertCircle /> : <CheckCircle />}
+            {feedback.type === 'error' ? <AlertCircle /> : feedback.type === 'success' ? <CheckCircle /> : <Info />}
             <p>{feedback.message}</p>
             </div>
         )}
+      
+      <div>
+        <h2 className="text-2xl font-bold text-slate-100 mb-6 flex items-center gap-2"><PlusCircle className="text-blue-400" /> Cargar Nuevo Podcast</h2>
         <form onSubmit={handleSubmit} className="space-y-6 bg-slate-800 p-6 rounded-2xl border border-slate-700">
             <div className="border-2 border-dashed rounded-2xl p-6 text-center border-slate-600">
                 <input type="file" accept="audio/mp3,audio/mpeg" onChange={handleFileChange} className="hidden" id="audio-upload" />
@@ -172,14 +207,34 @@ export default function AdminPanel() {
             </div>
             {isUploading && <div className="w-full bg-slate-700 rounded-full h-2.5"><div className="bg-blue-600 h-2.5 rounded-full" style={{ width: `${uploadProgress}%` }}></div></div>}
             <div className="space-y-4">
-                <input type="text" value={formData.titulo} onChange={(e) => setFormData({...formData, titulo: e.target.value})} placeholder="Título del Podcast" className="w-full p-3 bg-slate-900 border-slate-700 rounded-xl" />
-                <input type="date" value={formData.fecha} onChange={(e) => setFormData({...formData, fecha: e.target.value})} className="w-full p-3 bg-slate-900 border-slate-700 rounded-xl" />
-                <textarea value={formData.resena} onChange={(e) => setFormData({...formData, resena: e.target.value})} placeholder="Reseña..." className="w-full p-3 h-24 bg-slate-900 border-slate-700 rounded-xl"></textarea>
+                <input type="text" value={formData.titulo} onChange={(e) => setFormData(prev => ({...prev, titulo: e.target.value}))} placeholder="Título del Podcast" className="w-full p-3 bg-slate-900 border-slate-700 rounded-xl" />
+                <input type="date" value={formData.fecha} onChange={(e) => setFormData(prev => ({...prev, fecha: e.target.value}))} className="w-full p-3 bg-slate-900 border-slate-700 rounded-xl" />
+                <textarea value={formData.resena} onChange={(e) => setFormData(prev => ({...prev, resena: e.target.value}))} placeholder="Reseña..." className="w-full p-3 h-24 bg-slate-900 border-slate-700 rounded-xl"></textarea>
                 <button type="submit" disabled={isUploading || !formData.archivo} className="w-full bg-blue-600 text-white font-bold py-3 rounded-xl disabled:opacity-50">
                     {isUploading ? 'SUBIENDO...' : 'SUBIR Y REGISTRAR'}
                 </button>
             </div>
         </form>
+      </div>
+
+      <div>
+        <h2 className="text-2xl font-bold text-slate-100 mb-6 flex items-center gap-2"><ListMusic className="text-purple-400" /> Podcasts en Firebase</h2>
+        <div className="bg-slate-800 p-4 rounded-2xl border border-slate-700 space-y-3">
+            {loadingPodcasts ? (
+                <div className="flex justify-center items-center py-10"><Loader2 className="animate-spin text-slate-500" /></div>
+            ) : podcasts.length > 0 ? podcasts.map(podcast => (
+                <div key={podcast.id} className="flex justify-between items-center bg-slate-900 p-3 rounded-lg hover:bg-slate-700/50">
+                    <div>
+                        <p className="font-bold text-white">{podcast.title}</p>
+                        <p className="text-xs text-slate-400">{new Date(podcast.date).toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+                        <p className="text-[10px] text-slate-500 font-mono">{podcast.fileName}</p>
+                    </div>
+                    <button onClick={() => handlePodcastDelete(podcast)} className="bg-red-900/50 text-red-400 font-bold text-xs px-3 py-2 rounded-md hover:bg-red-800/50">
+                        <Trash2 size={14} />
+                    </button>
+                </div>
+            )) : <p className="text-center text-slate-500 text-sm py-4">No hay podcasts en Firebase. ¡Sube el primero!</p>}
+        </div>
       </div>
 
       <div>

@@ -75,8 +75,12 @@ export default function PacientePanel() {
       setFeedback({ message: '¡Registro exitoso! Tu cuenta está pendiente de aprobación por un administrador.', type: 'success' });
       setView('login');
     } catch (error) {
-      console.error(error);
-      setFeedback({ message: error.message, type: 'error' });
+      console.error("Register Error:", error.code, error.message);
+      let message = `Error al registrar: ${error.message}`;
+      if (error.code === 'auth/configuration-not-found') {
+        message = "Error de Firebase (auth/configuration-not-found): Revisa la configuración de tu proyecto en firebase.google.com. Asegúrate de que las API keys en tu archivo firebase.js son correctas y que el producto de Autenticación está bien inicializado.";
+      }
+      setFeedback({ message, type: 'error' });
     }
   };
 
@@ -87,8 +91,28 @@ export default function PacientePanel() {
       await signInWithEmailAndPassword(auth, email, password);
       // Auth state change will handle the rest
     } catch (error) {
-      console.error(error);
-      setFeedback({ message: 'Correo o contraseña incorrectos.', type: 'error' });
+      console.error("Login Error:", error.code, error.message);
+      let message = 'Ocurrió un error inesperado.';
+      switch (error.code) {
+        case 'auth/user-not-found':
+          message = 'No se encontró ningún usuario con este correo electrónico.';
+          break;
+        case 'auth/wrong-password':
+          message = 'La contraseña es incorrecta. Inténtalo de nuevo.';
+          break;
+        case 'auth/invalid-email':
+          message = 'El formato del correo electrónico no es válido.';
+          break;
+        case 'auth/operation-not-allowed':
+          message = 'La autenticación por correo y contraseña no está habilitada en la consola de Firebase.';
+          break;
+        case 'auth/configuration-not-found':
+            message = "Error de Firebase (auth/configuration-not-found): Revisa la configuración de tu proyecto en firebase.google.com. Asegúrate de que las API keys en tu archivo firebase.js son correctas y que el producto de Autenticación está bien inicializado.";
+            break;
+        default:
+          message = `Error de autenticación: ${error.message}`;
+      }
+      setFeedback({ message, type: 'error' });
     }
   };
   

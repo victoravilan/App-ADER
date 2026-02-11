@@ -9,6 +9,7 @@ export default {
       colors: {
         'ader-blue': '#0057b8',
         'ader-green': '#4CAF50',
+        'ader-light-green': '#81C784',
         'background-light': '#F5F5F5',
         'text-light': '#333333',
       },
